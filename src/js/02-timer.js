@@ -62,10 +62,8 @@ function padWithZeros(number, width) {
 
 startBtn.addEventListener("click", startCountdown);
 
-Notiflix.Notify.success('Sol lucet omnibus');
 
-Notiflix.Notify.failure('Qui timide rogat docet negare');
 
-Notiflix.Notify.warning('Memento te hominem esse');
+Notiflix.Notify.failure("Please choose a date in the future");
 
-Notiflix.Notify.info('Cogito ergo sum');
+
