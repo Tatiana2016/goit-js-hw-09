@@ -5,6 +5,10 @@ import Notiflix from 'notiflix';
 const dateTimePicker = document.querySelector("#datetime-picker");
 const startBtn = document.querySelector("#start-btn");
 const timerEl = document.querySelector("#timer");
+const timerListEl = document.querySelector("#timer-list");
+
+let countdown;
+let timerList = [];
 
 const options = {
   enableTime: true,
@@ -13,7 +17,7 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     if (selectedDates[0] < new Date()) {
-      window.alert("Please choose a date in the future");
+      Notiflix.Notify.failure("Please choose a date in the future");
       dateTimePicker.value = "";
       startBtn.disabled = true;
     } else {
@@ -24,28 +28,36 @@ const options = {
 
 flatpickr("#datetime-picker", options);
 
-let countdown;
-
 function startCountdown() {
   const targetDate = new Date(dateTimePicker.value).getTime();
   if (isNaN(targetDate)) {
     return;
   }
+  startBtn.disabled = true;
   countdown = setInterval(() => {
     const now = new Date().getTime();
     const remaining = targetDate - now;
     if (remaining <= 0) {
       clearInterval(countdown);
-      timerEl.textContent = "00:00:00:00";
-      startBtn.disabled = true;
+      timerEl.textContent = "00:00:00";
+      timerList.push(dateTimePicker.value);
+      renderTimerList();
+      startBtn.disabled = false;
       return;
     }
     const { days, hours, minutes, seconds } = convertMilliseconds(remaining);
-    timerEl.textContent = `${padWithZeros(days, 2)}:${padWithZeros(
-      hours,
-      2
-    )}:${padWithZeros(minutes, 2)}:${padWithZeros(seconds, 2)}`;
+    timerEl.textContent = `${padWithZeros(hours, 2)}:${padWithZeros(minutes, 2)}:${padWithZeros(seconds, 2)}`;
   }, 1000);
+}
+
+function renderTimerList() {
+  const timerListEl = document.querySelector("#timer-list");
+  timerListEl.innerHTML = "";
+  for (let i = 0; i < timerList.length; i++) {
+    const timerItemEl = document.createElement("li");
+    timerItemEl.textContent = timerList[i];
+    timerListEl.appendChild(timerItemEl);
+  }
 }
 
 function convertMilliseconds(milliseconds) {
@@ -61,9 +73,3 @@ function padWithZeros(number, width) {
 }
 
 startBtn.addEventListener("click", startCountdown);
-
-
-
-Notiflix.Notify.failure("Please choose a date in the future");
-
-
