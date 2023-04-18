@@ -38,16 +38,18 @@ function startCountdown() {
   startBtn.disabled = true;
   countdown = setInterval(() => {
     const now = new Date().getTime();
-    const { days, hours, minutes, seconds } = convertMs(targetDate - now);
+    const timeLeft = targetDate - now;
+    if (timeLeft < 0) {
+      clearInterval(countdown);
+      startBtn.disabled = false;
+      return;
+    }
+    const { days, hours, minutes, seconds } = convertMs(timeLeft);
     renderTimerList(days, hours, minutes, seconds);
     timerEl.querySelector("[data-days]").textContent = padWithZeros(days, 2);
     timerEl.querySelector("[data-hours]").textContent = padWithZeros(hours, 2);
     timerEl.querySelector("[data-minutes]").textContent = padWithZeros(minutes, 2);
     timerEl.querySelector("[data-seconds]").textContent = padWithZeros(seconds, 2);
-    if (now >= targetDate) {
-      clearInterval(countdown);
-      startBtn.disabled = false;
-    }
   }, 1000);
 }
 
@@ -56,12 +58,14 @@ function renderTimerList(days, hours, minutes, seconds) {
   const li = document.createElement("li");
   li.textContent = timer;
   if (!timerListEl) {
-    console.error("timerListEl is null or undefined");
+    console.log(renderTimerList);
     return;
   }
   timerListEl.appendChild(li);
+  console.log(timer); // log the timer to the console
 }
-  function convertMs(ms) {
+
+function convertMs(ms) {
   // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
@@ -73,13 +77,12 @@ function renderTimerList(days, hours, minutes, seconds) {
   // Remaining hours
   const hours = Math.floor((ms % day) / hour);
   // Remaining minutes
-  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const minutes = Math.floor((ms % hour) / minute);
   // Remaining seconds
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  const seconds = Math.floor((ms % minute) / second);
 
   return { days, hours, minutes, seconds };
 }
-
 
 function padWithZeros(number, width) {
   return number.toString().padStart(width, "0");
