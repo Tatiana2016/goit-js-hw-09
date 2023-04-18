@@ -1,0 +1,2 @@
+const t=document.querySelector("[data-start]"),e=document.querySelector("[data-stop]");let l=null;function n(){return`#${Math.floor(16777215*Math.random()).toString(16).padStart(6,0)}`}t.addEventListener("click",(()=>{null===l&&(l=window.setInterval((()=>{const t=n();document.body.style.backgroundColor=t}),1e3),t.disabled=!0,e.disabled=!1)})),e.addEventListener("click",(()=>{null!==l&&(window.clearInterval(l),l=null,t.disabled=!1,e.disabled=!0)})),console.log(n);
+//# sourceMappingURL=01-color-switcher.bf32caac.js.map
