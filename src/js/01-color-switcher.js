@@ -15,8 +15,10 @@ startButton.addEventListener('click', () => {
       const newColor = getRandomHexColor();
       document.body.style.backgroundColor = newColor;
     }, 1000);
-    // Вимикаємо кнопку "Start"
+     // Вимикаємо кнопку "Start"
     startButton.disabled = true;
+    // Увімкнути кнопку "Stop"
+    stopButton.disabled = false;
   }
 });
 
@@ -28,6 +30,8 @@ stopButton.addEventListener('click', () => {
     intervalId = null;
     // Увімкнути кнопку "Start"
     startButton.disabled = false;
+    // Вимикаємо кнопку "Stop"
+    stopButton.disabled = true;
   }
 });
 console.log(getRandomHexColor);
